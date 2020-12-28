@@ -47,11 +47,11 @@ module.exports = function (app) {
         if (Object.keys(query).length === 0 && query.constructor === Object) {
           throw new Error('no update field(s) sent');
         }
+        if (!await Issue.findById(_id)) throw new Error();
         const issue = await Issue.updateOne({ _id }, {
           ...query,
           updated_on: new Date()
         });
-        if (!issue) throw new Error();
         res.json({
           result: 'successfully updated',
           _id: _id
@@ -75,8 +75,8 @@ module.exports = function (app) {
         const { _id } = req.body;
         id = _id;
         if (!_id) throw new Error("missing _id");
+        if (!await Issue.findById(_id)) throw new Error();
         const deleted = await Issue.deleteOne({ _id });
-        if (!deleted) throw new Error();
         res.json({
           result: 'successfully deleted',
           _id: _id
