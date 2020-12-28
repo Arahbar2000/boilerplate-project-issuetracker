@@ -44,14 +44,14 @@ module.exports = function (app) {
         const { _id, ...query } = req.body;
         id = _id;
         if (!_id) throw new Error("missing _id");
-        if (Object.keys(query).length === 0 && query.constructor === Object) {
-          throw new Error('no update field(s) sent');
-        }
         const issue = await Issue.updateOne({ _id }, {
           ...query,
           updated_on: new Date()
         });
         if (!issue) throw new Error();
+        if (Object.keys(query).length === 0 && query.constructor === Object) {
+          throw new Error('no update field(s) sent');
+        }
         res.json({
           result: 'successfully updated',
           _id: _id
